@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let viewModel: EmojiMemoryGameVM
+    @ObservedObject var viewModel: EmojiMemoryGameVM
 
     var body: some View {
         ScrollView {
@@ -16,6 +16,7 @@ struct ContentView: View {
                 ForEach(viewModel.cards) { card in
                     CardView(card: card)
                         .aspectRatio(2 / 3, contentMode: .fit)
+                        .onTapGesture { viewModel.choose(card) }
                 }
             }
         }

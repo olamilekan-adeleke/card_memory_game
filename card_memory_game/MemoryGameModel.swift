@@ -21,7 +21,21 @@ struct MemoryGame<T> {
         }
     }
 
-    func chooseCard(_ card: Card) {}
+    mutating func chooseCard(_ card: Card) {
+        if let cardIndex = index(of: card) {
+            cards[cardIndex].isFaceUp.toggle()
+        }
+    }
+
+    func index(of card: Card) -> Int? {
+        for indexCount in 0 ..< cards.count {
+            if cards[indexCount].id == card.id {
+                return indexCount
+            }
+        }
+
+        return nil
+    }
 
     struct Card: Identifiable {
         var isFaceUp: Bool = false
