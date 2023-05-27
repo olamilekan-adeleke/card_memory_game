@@ -10,7 +10,7 @@ import Foundation
 struct MemoryGame<T> where T: Equatable {
     private(set) var cards: [Card]
 
-    var currentFacedUpCardIndex: Int?
+    private var currentFacedUpCardIndex: Int?
 
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> T) {
         cards = []
@@ -32,66 +32,49 @@ struct MemoryGame<T> where T: Equatable {
 
             if let facedUpCardIndex = currentFacedUpCardIndex {
                 print("facedUpCardIndex: \(facedUpCardIndex)")
-//                let cardsMatched: Bool = checkIfCardContentMatched(
-//                    this: cardIndex,
-//                    that: facedUpCardIndex
-//                )
-//                if cardsMatched {
-//                    updateCardsPairsToMatching(pairOne: cardIndex, pairTwo: facedUpCardIndex)
-//                    currentFacedUpCardIndex = nil
-//                } else {
-//                    updateAllCardsFacedUp()
-//                    currentFacedUpCardIndex = cardIndex
-//                }
+                let cardsMatched: Bool = checkIfCardContentMatched(
+                    this: cardIndex,
+                    that: facedUpCardIndex
+                )
 
-                if cards[cardIndex].content == cards[facedUpCardIndex].content {
-                    print("isMatched: \(true)")
-                    cards[cardIndex].isMatched = true
-                    cards[facedUpCardIndex].isMatched = true
-
+                if cardsMatched {
+                    updateCardsPairsToMatching(pairOne: cardIndex, pairTwo: facedUpCardIndex)
                     currentFacedUpCardIndex = nil
-                    print("\(cards)")
-                    print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
-
-                } else {
-                    for index in cards.indices {
-                        cards[index].isFaceUp = false
-                    }
-                    currentFacedUpCardIndex = cardIndex
-                    print("\(cards)")
-                    print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
                 }
+                
+                currentFacedUpCardIndex = nil
+            } else {
+                updateAllCardsFacedUp()
+                currentFacedUpCardIndex = cardIndex
+                print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
             }
 
             cards[cardIndex].isFaceUp.toggle()
-//            print("\(cards)")
         }
     }
 
-//    func checkIfCardContentMatched(this: Int, that: Int) -> Bool {
-//        return cards[this].content == cards[that].content
-//    }
-//
-//    mutating func updateCardsPairsToMatching(pairOne: Int, pairTwo: Int) {
-//        cards[pairOne].isMatched = true
-//        cards[pairTwo].isMatched = true
-//    }
-//
-//    mutating func updateAllCardsFacedUp() {
-//        for index in cards.indices {
-//            cards[index].isFaceUp = false
-//        }
-//    }
+    private func checkIfCardContentMatched(this: Int, that: Int) -> Bool {
+        return cards[this].content == cards[that].content
+    }
+
+    private mutating func updateCardsPairsToMatching(pairOne: Int, pairTwo: Int) {
+        print("isMatched: \(true)")
+        cards[pairOne].isMatched = true
+        cards[pairTwo].isMatched = true
+
+        print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
+    }
+
+    private mutating func updateAllCardsFacedUp() {
+        for index in cards.indices {
+            cards[index].isFaceUp = false
+        }
+    }
 
     struct Card: Identifiable {
+        let content: T
+        let id: Int
         var isFaceUp: Bool = false
         var isMatched: Bool = false
-        var content: T
-        var id: Int
     }
-}
-
-
-extension Array {
-    
 }

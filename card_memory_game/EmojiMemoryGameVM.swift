@@ -8,9 +8,11 @@
 import Foundation
 
 class EmojiMemoryGameVM: ObservableObject {
-    static let emojis = ["😃", "🌟", "🎉", "🌈", "🍕", "🐶", "🌸", "🏆", "📚", "💡", "🎁", "🍦", "🐱", "🌞", "🌺", "⭐️", "🎈", "🍔", "🐾", "🌼", "🥇", "🔍", "📖", "✨", "🎊", "🍩", "🌻", "🏅", "🎀", "🍓", "🐈", "🌝", "🌷", "🎂", "🚀", "🎵", "🌍", "🍎", "🐧", "🌹", "🏠", "💻"]
+    typealias Card = MemoryGame<String>.Card
 
-    static func createMemoryGame() -> MemoryGame<String> {
+    private static let emojis = ["😃", "🌟", "🎉", "🌈", "🍕", "🐶", "🌸", "🏆", "📚", "💡", "🎁", "🍦", "🐱", "🌞", "🌺", "⭐️", "🎈", "🍔", "🐾", "🌼", "🥇", "🔍", "📖", "✨", "🎊", "🍩", "🌻", "🏅", "🎀", "🍓", "🐈", "🌝", "🌷", "🎂", "🚀", "🎵", "🌍", "🍎", "🐧", "🌹", "🏠", "💻"]
+
+    private static func createMemoryGame() -> MemoryGame<String> {
         MemoryGame<String>(numberOfPairsOfCards: 4) { pairIndex in
             emojis[pairIndex]
         }
@@ -18,11 +20,11 @@ class EmojiMemoryGameVM: ObservableObject {
 
     @Published private var model: MemoryGame<String> = createMemoryGame()
 
-    var cards: [MemoryGame<String>.Card] { model.cards }
+    var cards: [Card] { model.cards }
 
     // MARK: - Intents
 
-    func choose(_ card: MemoryGame<String>.Card) {
+    func choose(_ card: Card) {
         model.chooseCard(card)
     }
 }
