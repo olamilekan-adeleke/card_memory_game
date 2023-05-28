@@ -10,7 +10,14 @@ import Foundation
 struct MemoryGame<T> where T: Equatable {
     private(set) var cards: [Card]
 
-    private var currentFacedUpCardIndex: Int?
+    private var currentFacedUpCardIndex: Int? {
+        let cardIndexWithFaceUp = cards.indices.filter({ cards[$0].isFaceUp })
+        if cardIndexWithFaceUp.count == 1 {
+            return cardIndexWithFaceUp.first
+        } else {
+            return nil
+        }
+    }
 
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> T) {
         cards = []
@@ -39,13 +46,10 @@ struct MemoryGame<T> where T: Equatable {
 
                 if cardsMatched {
                     updateCardsPairsToMatching(pairOne: cardIndex, pairTwo: facedUpCardIndex)
-                    currentFacedUpCardIndex = nil
                 }
-                
-                currentFacedUpCardIndex = nil
+
             } else {
                 updateAllCardsFacedUp()
-                currentFacedUpCardIndex = cardIndex
                 print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
             }
 
@@ -74,7 +78,7 @@ struct MemoryGame<T> where T: Equatable {
     struct Card: Identifiable {
         let content: T
         let id: Int
-        var isFaceUp: Bool = false
+        var isFaceUp: Bool = true
         var isMatched: Bool = false
     }
 }

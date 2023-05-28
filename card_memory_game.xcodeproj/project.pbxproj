@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3996438F2A2266C8003C623D /* AspectVGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996438E2A2266C8003C623D /* AspectVGridView.swift */; };
 		39FBD5A72A17CE9600F10BAF /* card_memory_gameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FBD5A62A17CE9600F10BAF /* card_memory_gameApp.swift */; };
 		39FBD5A92A17CE9600F10BAF /* EmojiMemoryGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FBD5A82A17CE9600F10BAF /* EmojiMemoryGameView.swift */; };
 		39FBD5AB2A17CE9800F10BAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39FBD5AA2A17CE9800F10BAF /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3996438E2A2266C8003C623D /* AspectVGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGridView.swift; sourceTree = "<group>"; };
 		39FBD5A32A17CE9600F10BAF /* card_memory_game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = card_memory_game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39FBD5A62A17CE9600F10BAF /* card_memory_gameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = card_memory_gameApp.swift; sourceTree = "<group>"; };
 		39FBD5A82A17CE9600F10BAF /* EmojiMemoryGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMemoryGameView.swift; sourceTree = "<group>"; };
@@ -36,6 +38,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3996438D2A2266A7003C623D /* view */ = {
+			isa = PBXGroup;
+			children = (
+				39FBD5A82A17CE9600F10BAF /* EmojiMemoryGameView.swift */,
+				3996438E2A2266C8003C623D /* AspectVGridView.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 		39FBD59A2A17CE9600F10BAF = {
 			isa = PBXGroup;
 			children = (
@@ -55,8 +66,8 @@
 		39FBD5A52A17CE9600F10BAF /* card_memory_game */ = {
 			isa = PBXGroup;
 			children = (
+				3996438D2A2266A7003C623D /* view */,
 				39FBD5A62A17CE9600F10BAF /* card_memory_gameApp.swift */,
-				39FBD5A82A17CE9600F10BAF /* EmojiMemoryGameView.swift */,
 				39FBD5B62A17D55100F10BAF /* EmojiMemoryGameVM.swift */,
 				39FBD5B42A17D01F00F10BAF /* MemoryGameModel.swift */,
 				39FBD5AA2A17CE9800F10BAF /* Assets.xcassets */,
@@ -145,6 +156,7 @@
 			files = (
 				39FBD5B72A17D55100F10BAF /* EmojiMemoryGameVM.swift in Sources */,
 				39FBD5A92A17CE9600F10BAF /* EmojiMemoryGameView.swift in Sources */,
+				3996438F2A2266C8003C623D /* AspectVGridView.swift in Sources */,
 				39FBD5A72A17CE9600F10BAF /* card_memory_gameApp.swift in Sources */,
 				39FBD5B52A17D01F00F10BAF /* MemoryGameModel.swift in Sources */,
 			);
