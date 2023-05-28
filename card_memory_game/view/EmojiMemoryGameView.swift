@@ -11,15 +11,6 @@ struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGameVM
 
     var body: some View {
-//        ScrollView {
-//            LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
-//                ForEach(viewModel.cards) { card in
-//                    CardView(card)
-//                        .aspectRatio(2 / 3, contentMode: .fit)
-//                        .onTapGesture { viewModel.choose(card) }
-//                }
-//            }
-//        }
         AspectVGridView(item: viewModel.cards, aspectRatio: 2 / 3, context: { card in
             if card.isMatched, !card.isFaceUp {
                 Rectangle().opacity(0)
@@ -37,45 +28,46 @@ struct EmojiMemoryGameView: View {
 struct CardView: View {
     private let card: MemoryGame<String>.Card
 
-    init(_ card: MemoryGame<String>.Card) { self.card = card }
+    init(_ card: MemoryGame<String>.Card) {
+        self.card = card
+    }
 
     var body: some View {
         GeometryReader { geomerty in
             ZStack {
-                let shape = RoundedRectangle(cornerRadius: DrawingConstants.radius)
+                PieView(
+                    startAngle: Angle(degrees: 0 - 90),
+                    endAngle: Angle(degrees: 110 - 90)
+                )
+                .padding(5)
+                .foregroundColor(.red)
+                .opacity(0.5)
 
-                if card.isFaceUp {
-                    shape.fill().foregroundColor(.white)
-                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-
-                    PieView(
-                        startAngle: Angle(degrees: 0 - 90),
-                        endAngle: Angle(degrees: 110 - 90)
-                    )
-                    .padding(5)
-                    .foregroundColor(.red)
-                    .opacity(0.5)
-
-                    Text(card.content)
-                        .font(.system(size: min(geomerty.size.height, geomerty.size.width) * DrawingConstants.fontScale))
-                } else if card.isMatched {
-                    shape.opacity(0)
-                } else {
-                    shape.fill()
-                }
+                Text(card.content)
+                    .rotationEffect(.degrees(card.isMatched ? 360 : 0))
+                    .animation(.linear(duration: 1).repeatForever(autoreverses: false))
+//                    .font(.system(size: min(geomerty.size.height, geomerty.size.width) * DrawingConstants.fontScale))
+                    .font(.system(size: DrawingConstants.fontSize))
+                    .scaleEffect(fontScale(thatFits: geomerty.size))
             }
+            .cardify(isFacedUp: card.isFaceUp)
         }
+    }
+
+    private func fontScale(thatFits size: CGSize) -> CGFloat {
+        return min(size.width, size.height) / (DrawingConstants.fontSize / DrawingConstants.fontScale)
     }
 
     private enum DrawingConstants {
         static let fontScale: CGFloat = 0.70
+        static let fontSize: CGFloat = 32
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGameVM()
-        game.choose(game.cards.first!)
+//        game.choose(game.cards.first!)
         return EmojiMemoryGameView(viewModel: game)
     }
 }
