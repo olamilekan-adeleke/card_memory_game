@@ -21,7 +21,8 @@ struct CardifyView: ViewModifier {
             } else {
                 shape.fill()
             }
-
+            
+            // learn that implict animation does not work for view that are not on screen
             content.opacity(self.isFacedUp ? 1 : 0)
         }
     }

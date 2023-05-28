@@ -11,7 +11,7 @@ struct MemoryGame<T> where T: Equatable {
     private(set) var cards: [Card]
 
     private var currentFacedUpCardIndex: Int? {
-        let cardIndexWithFaceUp = cards.indices.filter({ cards[$0].isFaceUp })
+        let cardIndexWithFaceUp = cards.indices.filter { cards[$0].isFaceUp }
         if cardIndexWithFaceUp.count == 1 {
             return cardIndexWithFaceUp.first
         } else {
@@ -28,6 +28,8 @@ struct MemoryGame<T> where T: Equatable {
             cards.append(Card(content: card, id: pairIndex * 2))
             cards.append(Card(content: card, id: (pairIndex * 2) + 1))
         }
+
+        shuffle()
     }
 
     mutating func chooseCard(_ card: Card) {
@@ -35,10 +37,8 @@ struct MemoryGame<T> where T: Equatable {
         if card.isFaceUp { return }
 
         if let cardIndex = cards.firstIndex(where: { $0.id == card.id }) {
-            print("Index: \(cardIndex)")
-
+            
             if let facedUpCardIndex = currentFacedUpCardIndex {
-                print("facedUpCardIndex: \(facedUpCardIndex)")
                 let cardsMatched: Bool = checkIfCardContentMatched(
                     this: cardIndex,
                     that: facedUpCardIndex
@@ -50,7 +50,6 @@ struct MemoryGame<T> where T: Equatable {
 
             } else {
                 updateAllCardsFacedUp()
-                print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
             }
 
             cards[cardIndex].isFaceUp.toggle()
@@ -65,8 +64,6 @@ struct MemoryGame<T> where T: Equatable {
         print("isMatched: \(true)")
         cards[pairOne].isMatched = true
         cards[pairTwo].isMatched = true
-
-        print("currentFacedUpCardIndex: \(String(describing: currentFacedUpCardIndex))")
     }
 
     private mutating func updateAllCardsFacedUp() {
@@ -74,6 +71,8 @@ struct MemoryGame<T> where T: Equatable {
             cards[index].isFaceUp = false
         }
     }
+
+    mutating func shuffle() {}
 
     struct Card: Identifiable {
         let content: T
