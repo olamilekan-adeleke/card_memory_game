@@ -55,7 +55,6 @@ struct CardView: View {
                 Text(card.content)
                     .rotationEffect(.degrees(card.isMatched ? 360 : 0))
                     .animation(.linear(duration: 1).repeatForever(autoreverses: false))
-//                    .font(.system(size: min(geomerty.size.height, geomerty.size.width) * DrawingConstants.fontScale))
                     .font(.system(size: DrawingConstants.fontSize))
                     .scaleEffect(fontScale(thatFits: geomerty.size))
             }
@@ -76,7 +75,6 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGameVM()
-//        game.choose(game.cards.first!)
         return EmojiMemoryGameView(viewModel: game)
     }
 }
