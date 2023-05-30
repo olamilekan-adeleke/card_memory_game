@@ -37,7 +37,6 @@ struct MemoryGame<T> where T: Equatable {
         if card.isFaceUp { return }
 
         if let cardIndex = cards.firstIndex(where: { $0.id == card.id }) {
-            
             if let facedUpCardIndex = currentFacedUpCardIndex {
                 let cardsMatched: Bool = checkIfCardContentMatched(
                     this: cardIndex,
@@ -72,7 +71,7 @@ struct MemoryGame<T> where T: Equatable {
         }
     }
 
-    mutating func shuffle() {}
+    mutating func shuffle() { cards.shuffle() }
 
     struct Card: Identifiable {
         let content: T

@@ -7,24 +7,35 @@
 
 import SwiftUI
 
-struct CardifyView: ViewModifier {
-    var isFacedUp: Bool
+struct CardifyView: AnimatableModifier {
+    init(isFacedUp: Bool) {
+        rotation = isFacedUp ? 0 : 180
+    }
+
+    // Question: Don't fully understand why to
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
+
+    var rotation: Double
 
     func body(content: Content) -> some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.radius)
 
-            if self.isFacedUp {
+            if animatableData < 90 {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
 
             } else {
                 shape.fill()
             }
-            
+
             // learn that implict animation does not work for view that are not on screen
-            content.opacity(self.isFacedUp ? 1 : 0)
+            content.opacity(animatableData < 90 ? 1 : 0)
         }
+        .rotation3DEffect(.degrees(animatableData), axis: (0, 1, 0))
     }
 
     private enum DrawingConstants {
@@ -35,6 +46,6 @@ struct CardifyView: ViewModifier {
 
 extension View {
     func cardify(isFacedUp: Bool) -> some View {
-        return self.modifier(CardifyView(isFacedUp: isFacedUp))
+        return modifier(CardifyView(isFacedUp: isFacedUp))
     }
 }

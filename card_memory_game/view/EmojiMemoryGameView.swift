@@ -11,17 +11,26 @@ struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGameVM
 
     var body: some View {
-        AspectVGridView(item: viewModel.cards, aspectRatio: 2 / 3, context: { card in
-            if card.isMatched, !card.isFaceUp {
-                Rectangle().opacity(0)
-            } else {
-                CardView(card)
-                    .padding(4)
-                    .onTapGesture { viewModel.choose(card) }
-            }
-        })
-        .foregroundColor(.red)
-        .padding(.horizontal)
+        VStack {
+            AspectVGridView(item: viewModel.cards, aspectRatio: 2 / 3, context: { card in
+                if card.isMatched, !card.isFaceUp {
+                    Rectangle().opacity(0)
+                } else {
+                    CardView(card)
+                        .padding(4)
+                        .transition(AnyTransition.scale)
+                        .onTapGesture {
+                            withAnimation(.easeIn) { viewModel.choose(card) }
+                        }
+                }
+            })
+            .foregroundColor(.red)
+
+            Button {
+                withAnimation { viewModel.shuffle() }
+            } label: { Text("Shuffle") }
+        }
+        .padding()
     }
 }
 
