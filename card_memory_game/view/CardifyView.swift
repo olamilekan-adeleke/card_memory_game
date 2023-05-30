@@ -12,7 +12,7 @@ struct CardifyView: AnimatableModifier {
         rotation = isFacedUp ? 0 : 180
     }
 
-    // Question: Don't fully understand why to
+    // Question: Don't fully understand why this is done
     var animatableData: Double {
         get { rotation }
         set { rotation = newValue }
@@ -33,6 +33,7 @@ struct CardifyView: AnimatableModifier {
             }
 
             // learn that implict animation does not work for view that are not on screen
+            // so this has to alraedy be in view to we can animate changes on it
             content.opacity(animatableData < 90 ? 1 : 0)
         }
         .rotation3DEffect(.degrees(animatableData), axis: (0, 1, 0))
