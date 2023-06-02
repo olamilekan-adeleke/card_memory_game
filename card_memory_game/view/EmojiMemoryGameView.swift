@@ -9,11 +9,20 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGameVM
-
     @State private var dealtCards = Set<Int>()
+    @Namespace private var namespace
 
     private func isCardUnDealt(_ card: EmojiMemoryGameVM.Card) -> Bool {
         return dealtCards.contains(card.id) == false
+    }
+
+    private func animatedCardDelay(_ card: EmojiMemoryGameVM.Card) -> Animation {
+        var delay = 0.0
+        if let index = viewModel.cards.firstIndex(where: { card.id == $0.id }) {
+            delay = Double(index) * (Contants.totalDealDuration / Double(viewModel.cards.count))
+        }
+
+        return Animation.easeIn(duration: Contants.dealDuration).delay(delay)
     }
 
     var body: some View {
@@ -23,19 +32,15 @@ struct EmojiMemoryGameView: View {
                     Rectangle().opacity(0)
                 } else {
                     CardView(card)
+                        .matchedGeometryEffect(id: card.id, in: namespace)
                         .padding(4)
-                        .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity))
+                        .transition(AnyTransition.asymmetric(insertion: .identity, removal: .opacity))
                         .onTapGesture {
                             withAnimation(.easeIn) { viewModel.choose(card) }
                         }
                 }
             })
             .foregroundColor(Contants.color)
-            .onAppear {
-                withAnimation {
-                    for card in viewModel.cards { dealtCards.insert(card.id) }
-                }
-            }
 
             deckBody
 
@@ -56,11 +61,19 @@ struct EmojiMemoryGameView: View {
         ZStack {
             ForEach(viewModel.cards.filter { isCardUnDealt($0) }) { card in
                 CardView(card)
-                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .scale))
+                    .matchedGeometryEffect(id: card.id, in: namespace)
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .scale))
             }
         }
         .frame(width: Contants.unDealWidth, height: Contants.unDealHeight)
         .foregroundColor(Contants.color)
+        .onTapGesture {
+            for card in viewModel.cards {
+                withAnimation(animatedCardDelay(card)) {
+                    dealtCards.insert(card.id)
+                }
+            }
+        }
     }
 
     enum Contants {
@@ -68,7 +81,7 @@ struct EmojiMemoryGameView: View {
         static let aspectRatio: CGFloat = 2 / 3
         static let dealDuration: Double = 0.6
         static let totalDealDuration: Double = 2
-        static let unDealHeight: CGFloat = 0
+        static let unDealHeight: CGFloat = 90
         static let unDealWidth = unDealHeight * aspectRatio
     }
 }
