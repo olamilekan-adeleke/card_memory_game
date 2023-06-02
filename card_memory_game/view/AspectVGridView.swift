@@ -64,9 +64,3 @@ struct AspectVGridView<Item, ItemView>: View where ItemView: View, Item: Identif
         return floor(size.width / CGFloat(columnCount))
     }
 }
-
-// struct AspectVGridView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AspectVGridView()
-//    }
-// }
