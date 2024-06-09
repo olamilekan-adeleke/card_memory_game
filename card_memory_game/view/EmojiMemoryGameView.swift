@@ -52,9 +52,21 @@ struct EmojiMemoryGameView: View {
     // MARK: - Sub - Views
 
     var shuffleButton: some View {
-        Button {
-            withAnimation { viewModel.shuffle() }
-        } label: { Text("Shuffle") }
+        HStack {
+            Button {
+                withAnimation {
+                    dealtCards = []
+                    viewModel.restart()
+                }
+            } label: { Text("Restart") }
+
+            Spacer()
+
+            Button {
+                withAnimation { viewModel.shuffle() }
+            } label: { Text("Shuffle") }
+        }
+        .padding(.horizontal)
     }
 
     var deckBody: some View {
@@ -88,6 +100,7 @@ struct EmojiMemoryGameView: View {
 
 struct CardView: View {
     private let card: MemoryGame<String>.Card
+    @State private var animatedBonusRemaing: Double = 0
 
     init(_ card: MemoryGame<String>.Card) {
         self.card = card
@@ -96,10 +109,25 @@ struct CardView: View {
     var body: some View {
         GeometryReader { geomerty in
             ZStack {
-                PieView(
-                    startAngle: Angle(degrees: 0 - 90),
-                    endAngle: Angle(degrees: 110 - 90)
-                )
+                Group {
+                    if card.isConsumingBonusTime {
+                        PieView(
+                            startAngle: Angle(degrees: 0 - 90),
+                            endAngle: Angle(degrees: (1 - animatedBonusRemaing) * 360 - 90)
+                        )
+                        .onAppear {
+                            animatedBonusRemaing = card.bonusRemaining
+                            withAnimation(.linear(duration: card.bonusTimeRemaining)) {
+                                animatedBonusRemaing = 0
+                            }
+                        }
+                    } else {
+                        PieView(
+                            startAngle: Angle(degrees: 110 - 90),
+                            endAngle: Angle(degrees: (1 - card.bonusRemaining) * 360 - 90)
+                        )
+                    }
+                }
                 .padding(5)
                 .foregroundColor(.red)
                 .opacity(0.5)
